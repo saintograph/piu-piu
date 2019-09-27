@@ -17,10 +17,14 @@ function controls.moveAvatar(dt)
     end
   end
   if love.keyboard.isDown('up','w') then
-    if player.y > 0 then
+    if player.y > 300 then
       player.y = player.y - (player.speed * dt)
     end
-	end
+  end
+  if love.keyboard.isDown('space') then
+    torpedo.y = player.y
+    torpedo.x = player.x
+  end
 end
 
 return controls
