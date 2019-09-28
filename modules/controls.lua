@@ -21,9 +21,11 @@ function controls.moveAvatar(dt)
       player.y = player.y - (player.speed * dt)
     end
   end
-  if love.keyboard.isDown('space') then
-    torpedo.y = player.y
-    torpedo.x = player.x
+  if love.keyboard.isDown('space') and canShoot then
+    new_torpedo = { x = player.x, y = player.y, img = torpedoImg }
+    table.insert(torpedoes, new_torpedo)
+    canShoot = false
+    canShootTimer = canShootTimerMax
   end
 end
 
