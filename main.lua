@@ -1,11 +1,12 @@
 -- Imports
 local Controls = require "modules/controls"
+suit = require 'modules/suit'
 -- local class = require 'middleclass'
 require "modules/class"
 
 -- Set debug to false for production
 debug = true
-gamestate = "playing"
+gamestate = "menu"
 
 -- Timers
 canShoot = true
@@ -29,15 +30,6 @@ player = {
   speed = 150
 }
 
-fire = false
-
-torpedo = {
-  img = nil,
-  x = nil,
-  y = nil,
-  speed = 350
-}
-
 world = {
   background = nil
 }
@@ -49,14 +41,12 @@ end
 function love.load(arg)
   world.background = love.graphics.newImage('assets/background.png')
   player.img = love.graphics.newImage('assets/submarine.png')
-  torpedo.img = love.graphics.newImage('assets/torpedo.png')
   torpedoImg = love.graphics.newImage('assets/torpedo.png')
 end
 
 function love.update(dt)
   if gamestate == "menu" then
-    love.graphics.setBackgroundColor(225, 152, 0)
-    if love.keyboard.isDown('k') then
+    if suit.Button("Hello, World!", 0, 0, 300, 30).hit then
       gamestate = "playing"
     end
   end
@@ -68,9 +58,6 @@ function love.update(dt)
       love.event.push('quit')
     end
     Controls.moveAvatar(dt)
-    if torpedo.y ~= nil then
-      torpedo.y = torpedo.y - (player.speed * dt)
-    end
     canShootTimer = canShootTimer - (1 * dt)
     for i, torpedo in ipairs(torpedoes) do
       torpedo.y = torpedo.y - (250 * dt)
@@ -82,11 +69,11 @@ function love.update(dt)
 end
 
 function love.draw(dt)
+  if gamestate == "menu" then
+    suit.draw()
+  end
   if gamestate == "playing" then
     love.graphics.draw(world.background, 0, 0)
-    if torpedo.y ~= nil then
-      love.graphics.draw(torpedo.img, torpedo.x, torpedo.y)
-    end
     love.graphics.draw(player.img, player.x, player.y)
     for i, torpedo in ipairs(torpedoes) do
       love.graphics.draw(torpedo.img, torpedo.x, torpedo.y)
